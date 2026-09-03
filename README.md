@@ -4,7 +4,7 @@
 - Vinicius Gabriel Almeida da Silva
 
 ## Tema do Jogo
-Jogo de aventura 3D com elementos de plataforma, combate e puzzles na qual o jogador controla os três Minions principais (Kevin, Stuart e Bob, não ao mesmo tempo, porém alternando entre eles através de um botão).
+Jogo de aventura 3D com elementos de plataforma, combate e puzzles baseado no clímax do filme Minions de 2015. O jogo se baseia na questão do jogador poder controlar os três minions principais (Kevin, Stuart e Bob, não ao mesmo tempo, porém alternando entre eles através de um botão).
 
 ## Sumário
 
