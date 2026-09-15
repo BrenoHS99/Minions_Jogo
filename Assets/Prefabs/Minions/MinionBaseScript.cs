@@ -1,44 +1,157 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MinionBaseScript : MonoBehaviour
 {
-    private GameObject camera;
-
+    // Plr Configurations
     public float speed;
+    public float initialSpeed;
+    public float sprintSpeed;
+    public float jumpForce;
 
+    private bool sprinting = false;
+
+    public bool onGround;
+
+    // GameObjects
+    private GameObject camera;
     public GameObject front;
+    public GameObject groundCheck;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Components
+    private Rigidbody rb;
+
+    // \_ Camera components
+    private Camera cameraComponent;
+
+
+    // Layers
+    public LayerMask groundLayer;
+
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
+        
+        // Camera
         camera = GameObject.FindWithTag("MainCamera");
+        cameraComponent = camera.GetComponent<Camera>();
+
+        // Start Scripts
+        speed = initialSpeed;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        // GROUND CHECKER
+
+        Ray ray = new Ray(groundCheck.transform.position, Vector3.down);
+        onGround = Physics.Raycast(ray, 0.7f, groundLayer);
+
+        // PLAYER INPUTS
+
+        // WASD
         if (Input.GetKey(KeyCode.W))
         {
-            transform.rotation = Quaternion.Euler(0,0,0);
-            transform.position += transform.forward * speed;
+            if (Input.GetKey(KeyCode.A)) // ^<
+            {
+                transform.rotation = Quaternion.Euler(0, -45, 0);
+            }
+            else if (Input.GetKey(KeyCode.D)) // ^>
+            {
+                transform.rotation = Quaternion.Euler(0, 45, 0);
+            }
+            else // ^
+            {
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
         }
 
-        if (Input.GetKey(KeyCode.A))
+        else if (Input.GetKey(KeyCode.A))
         {
-			transform.rotation = Quaternion.Euler(0, -90, 0);
-			transform.position += transform.forward * speed;
-		}
+            if (Input.GetKey(KeyCode.S)) // <v
+            {
+                transform.rotation = Quaternion.Euler(0, -135, 0);
+            }
+            else if (Input.GetKey(KeyCode.W)) // <^
+            {
+                transform.rotation = Quaternion.Euler(0, -45, 0);
+            }
+            else // <
+            {
+                transform.rotation = Quaternion.Euler(0, -90, 0);
+            }
+        }
 
-		if (Input.GetKey(KeyCode.S))
+		else if (Input.GetKey(KeyCode.S))
 		{
-			transform.rotation = Quaternion.Euler(0, 180, 0);
-			transform.position += transform.forward * speed;
-		}
+            if (Input.GetKey(KeyCode.A)) // v<
+            {
+                transform.rotation = Quaternion.Euler(0, -135, 0);
+            }
+            else if (Input.GetKey(KeyCode.D)) // v>
+            {
+                transform.rotation = Quaternion.Euler(0, 135, 0);
+            }
+            else // v
+            {
+                transform.rotation = Quaternion.Euler(0, 180, 0);
+            }
+        }
 
-		if (Input.GetKey(KeyCode.D))
+		else if (Input.GetKey(KeyCode.D))
 		{
-			transform.rotation = Quaternion.Euler(0, 90, 0);
-			transform.position += transform.forward * speed;
-		}
-	}
+            if (Input.GetKey(KeyCode.W)) // >^
+            {
+                transform.rotation = Quaternion.Euler(0, 45, 0);
+            }
+            else if (Input.GetKey(KeyCode.S)) // >v
+            {
+                transform.rotation = Quaternion.Euler(0, 135, 0);
+            }
+            else // >
+            {
+                transform.rotation = Quaternion.Euler(0, 90, 0);
+            }
+        }
+
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+        {
+            rb.MovePosition(rb.position + transform.forward * speed * Time.deltaTime);
+        }
+        // Jump
+
+        if (Input.GetKey(KeyCode.Space) && onGround)
+        {
+            rb.linearVelocity = new Vector3(
+                rb.linearVelocity.x,
+                1 * jumpForce,
+                rb.linearVelocity.z);
+        }
+	
+        // Sprint
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            sprinting = true;
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            sprinting = false;
+        }
+
+        if (sprinting)
+        {
+            speed = sprintSpeed;
+            cameraComponent.fieldOfView = Mathf.Lerp(cameraComponent.fieldOfView, 70f, 0.8f * Time.deltaTime);
+        }
+        else
+        {
+            speed = initialSpeed;
+            cameraComponent.fieldOfView = Mathf.Lerp(cameraComponent.fieldOfView, 60f, 10f * Time.deltaTime);
+        }
+
+        // Camera lerp
+
+        camera.transform.position = Vector3.Lerp(camera.transform.position, transform.position + new Vector3(0, 6, -7), 0.03f);
+    }
 }
