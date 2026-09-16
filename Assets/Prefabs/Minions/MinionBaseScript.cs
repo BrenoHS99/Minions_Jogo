@@ -82,8 +82,8 @@ public class MinionBaseScript : MonoBehaviour
             }
         }
 
-		else if (Input.GetKey(KeyCode.S))
-		{
+        else if (Input.GetKey(KeyCode.S))
+        {
             if (Input.GetKey(KeyCode.A)) // v<
             {
                 transform.rotation = Quaternion.Euler(0, -135, 0);
@@ -98,8 +98,8 @@ public class MinionBaseScript : MonoBehaviour
             }
         }
 
-		else if (Input.GetKey(KeyCode.D))
-		{
+        else if (Input.GetKey(KeyCode.D))
+        {
             if (Input.GetKey(KeyCode.W)) // >^
             {
                 transform.rotation = Quaternion.Euler(0, 45, 0);
@@ -127,7 +127,7 @@ public class MinionBaseScript : MonoBehaviour
                 1 * jumpForce,
                 rb.linearVelocity.z);
         }
-	
+
         // Sprint
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
