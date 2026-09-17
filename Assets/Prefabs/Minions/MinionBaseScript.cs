@@ -8,6 +8,7 @@ public class MinionBaseScript : MonoBehaviour
     public float initialSpeed;
     public float sprintSpeed;
     public float jumpForce;
+    public bool canMoveChar = true;
 
     private bool sprinting = false;
 
@@ -15,7 +16,6 @@ public class MinionBaseScript : MonoBehaviour
 
     // GameObjects
     private GameObject camera;
-    public GameObject front;
     public GameObject groundCheck;
 
     // Components
@@ -49,106 +49,114 @@ public class MinionBaseScript : MonoBehaviour
 
         // PLAYER INPUTS
 
-        // WASD
-        if (Input.GetKey(KeyCode.W))
+        if (canMoveChar)
         {
-            if (Input.GetKey(KeyCode.A)) // ^<
-            {
-                transform.rotation = Quaternion.Euler(0, -45, 0);
-            }
-            else if (Input.GetKey(KeyCode.D)) // ^>
-            {
-                transform.rotation = Quaternion.Euler(0, 45, 0);
-            }
-            else // ^
-            {
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-            }
-        }
+			// WASD
+			if (Input.GetKey(KeyCode.W))
+			{
+				if (Input.GetKey(KeyCode.A)) // ^<
+				{
+					transform.rotation = Quaternion.Euler(0, -45, 0);
+				}
+				else if (Input.GetKey(KeyCode.D)) // ^>
+				{
+					transform.rotation = Quaternion.Euler(0, 45, 0);
+				}
+				else // ^
+				{
+					transform.rotation = Quaternion.Euler(0, 0, 0);
+				}
+			}
 
-        else if (Input.GetKey(KeyCode.A))
-        {
-            if (Input.GetKey(KeyCode.S)) // <v
-            {
-                transform.rotation = Quaternion.Euler(0, -135, 0);
-            }
-            else if (Input.GetKey(KeyCode.W)) // <^
-            {
-                transform.rotation = Quaternion.Euler(0, -45, 0);
-            }
-            else // <
-            {
-                transform.rotation = Quaternion.Euler(0, -90, 0);
-            }
-        }
+			else if (Input.GetKey(KeyCode.A))
+			{
+				if (Input.GetKey(KeyCode.S)) // <v
+				{
+					transform.rotation = Quaternion.Euler(0, -135, 0);
+				}
+				else if (Input.GetKey(KeyCode.W)) // <^
+				{
+					transform.rotation = Quaternion.Euler(0, -45, 0);
+				}
+				else // <
+				{
+					transform.rotation = Quaternion.Euler(0, -90, 0);
+				}
+			}
 
-        else if (Input.GetKey(KeyCode.S))
-        {
-            if (Input.GetKey(KeyCode.A)) // v<
-            {
-                transform.rotation = Quaternion.Euler(0, -135, 0);
-            }
-            else if (Input.GetKey(KeyCode.D)) // v>
-            {
-                transform.rotation = Quaternion.Euler(0, 135, 0);
-            }
-            else // v
-            {
-                transform.rotation = Quaternion.Euler(0, 180, 0);
-            }
-        }
+			else if (Input.GetKey(KeyCode.S))
+			{
+				if (Input.GetKey(KeyCode.A)) // v<
+				{
+					transform.rotation = Quaternion.Euler(0, -135, 0);
+				}
+				else if (Input.GetKey(KeyCode.D)) // v>
+				{
+					transform.rotation = Quaternion.Euler(0, 135, 0);
+				}
+				else // v
+				{
+					transform.rotation = Quaternion.Euler(0, 180, 0);
+				}
+			}
 
-        else if (Input.GetKey(KeyCode.D))
-        {
-            if (Input.GetKey(KeyCode.W)) // >^
-            {
-                transform.rotation = Quaternion.Euler(0, 45, 0);
-            }
-            else if (Input.GetKey(KeyCode.S)) // >v
-            {
-                transform.rotation = Quaternion.Euler(0, 135, 0);
-            }
-            else // >
-            {
-                transform.rotation = Quaternion.Euler(0, 90, 0);
-            }
-        }
+			else if (Input.GetKey(KeyCode.D))
+			{
+				if (Input.GetKey(KeyCode.W)) // >^
+				{
+					transform.rotation = Quaternion.Euler(0, 45, 0);
+				}
+				else if (Input.GetKey(KeyCode.S)) // >v
+				{
+					transform.rotation = Quaternion.Euler(0, 135, 0);
+				}
+				else // >
+				{
+					transform.rotation = Quaternion.Euler(0, 90, 0);
+				}
+			}
 
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
-        {
-            rb.MovePosition(rb.position + transform.forward * speed * Time.deltaTime);
-        }
-        // Jump
+			if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+			{
+				rb.MovePosition(rb.position + transform.forward * speed * Time.deltaTime);
+			}
+			// Jump
 
-        if (Input.GetKey(KeyCode.Space) && onGround)
-        {
-            rb.linearVelocity = new Vector3(
-                rb.linearVelocity.x,
-                1 * jumpForce,
-                rb.linearVelocity.z);
-        }
+			if (Input.GetKey(KeyCode.Space) && onGround)
+			{
+				rb.linearVelocity = new Vector3(
+					rb.linearVelocity.x,
+					1 * jumpForce,
+					rb.linearVelocity.z);
+			}
 
-        // Sprint
+			// Sprint
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            sprinting = true;
-        }
-        if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            sprinting = false;
-        }
+			if (Input.GetKeyDown(KeyCode.LeftShift))
+			{
+				sprinting = true;
+			}
+			if (Input.GetKeyUp(KeyCode.LeftShift))
+			{
+				sprinting = false;
+			}
+		}
 
-        if (sprinting)
-        {
-            speed = sprintSpeed;
-            cameraComponent.fieldOfView = Mathf.Lerp(cameraComponent.fieldOfView, 70f, 0.8f * Time.deltaTime);
-        }
-        else
-        {
-            speed = initialSpeed;
-            cameraComponent.fieldOfView = Mathf.Lerp(cameraComponent.fieldOfView, 60f, 10f * Time.deltaTime);
-        }
+		if (sprinting)
+		{
+			speed = sprintSpeed;
+			cameraComponent.fieldOfView = Mathf.Lerp(cameraComponent.fieldOfView, 70f, 0.8f * Time.deltaTime);
+		}
+		else
+		{
+			speed = initialSpeed;
+			cameraComponent.fieldOfView = Mathf.Lerp(cameraComponent.fieldOfView, 60f, 10f * Time.deltaTime);
+		}
+
+		if (!canMoveChar)
+		{
+			sprinting = false;
+		}
 
         // Camera lerp
 

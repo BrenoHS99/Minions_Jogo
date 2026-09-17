@@ -8,45 +8,116 @@ public class PrimaryAttack : MonoBehaviour
     public GameObject heatBullet;
     public Transform heatBulletSpawnPos;
 
-    // Character Changing Script
+    // Minion script components
     private CharacterChanging charChangeScript;
+    private MinionBaseScript minionScript;
 
     // Other
     private bool canAttack = true;
+    private bool dashing = false;
+
+    // Components
+    private Rigidbody rb;
+
+    // Abilities configurations
+
+    // Kevin
+
+    // Bob
+    public float dashSpeed;
+    public float dashTime;
+    public LayerMask groundMask;
+
+    // Stuart
 
     void Start()
     {
         charChangeScript = GetComponent<CharacterChanging>();
+        minionScript = GetComponent<MinionBaseScript>();
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
+        // Left mouse to activate ability
         if (Input.GetMouseButton(0))
         {
-            StartCoroutine(ActivateAttack());
-        }
-    }
-
-    IEnumerator ActivateAttack()
-    {
-        if (canAttack)
-        {
-            canAttack = false;
+            // Kevin ability
             if (charChangeScript.currentChar == "k")
             {
-                Instantiate(heatBullet, heatBulletSpawnPos.position, heatBulletSpawnPos.rotation);
-
-                yield return new WaitForSeconds(1f);
-                canAttack = true;
+                StartCoroutine(ActivateAttack("k"));
             }
+
+            // Bob ability
             if (charChangeScript.currentChar == "b")
             {
-
+                StartCoroutine(ActivateAttack("b"));
             }
+
+            // Stuart ability
             if (charChangeScript.currentChar == "s")
             {
-
+                StartCoroutine(ActivateAttack("s"));
             }
+        }
+
+        // Dash condition
+        if (dashing)
+        {
+            rb.MovePosition(transform.position += transform.forward * dashSpeed * Time.deltaTime);
+
+            Ray r = new Ray(transform.position, transform.forward);
+            if (Physics.Raycast(r, 1f, groundMask))
+            {
+                dashing = false;
+                charChangeScript.canChange = true;
+                minionScript.canMoveChar = true;
+            }
+        }
+
+        // Abilities Coroutine
+        IEnumerator ActivateAttack(string charAbility)
+        {
+            if (canAttack)
+            {
+                canAttack = false;
+
+                // Kevin ability
+                if (charAbility == "k")
+                {
+                    Instantiate(heatBullet, heatBulletSpawnPos.position, heatBulletSpawnPos.rotation);
+                    yield return new WaitForSeconds(1f);
+                }
+
+                // Bob ability
+                if (charAbility == "b")
+                {
+                    StartCoroutine(ActivateDash());
+                    yield return new WaitForSeconds(1.5f);
+                }
+
+                // Stuart ability
+                if (charAbility == "s")
+                {
+
+                }
+                canAttack = true;
+            }
+        }
+
+        IEnumerator ActivateDash()
+        {
+            dashing = true;
+
+            charChangeScript.canChange = false;
+            minionScript.canMoveChar = false;
+
+            yield return new WaitForSeconds(dashTime);
+
+            dashing = false;
+
+            charChangeScript.canChange = true;
+            minionScript.canMoveChar = true;
         }
     }
 }

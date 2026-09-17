@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class CharacterChanging : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class CharacterChanging : MonoBehaviour
     // Components
 
     private MinionBaseScript plrBaseScript;
+
+    // Configurations
+    public bool canChange = true;
 
     void Start()
     {
@@ -34,15 +38,15 @@ public class CharacterChanging : MonoBehaviour
 
         if (Input.GetKeyDown("1"))
         {
-            ChangeCharacter("k");
+            StartCoroutine(ChangeCharacter("k"));
         }
         if (Input.GetKeyDown("2"))
         {
-            ChangeCharacter("b");
+			StartCoroutine(ChangeCharacter("b"));
         }
         if (Input.GetKeyDown("3"))
         {
-            ChangeCharacter("s");
+			StartCoroutine(ChangeCharacter("s"));
         }
 
         // Characters attributes
@@ -66,8 +70,9 @@ public class CharacterChanging : MonoBehaviour
         }
     }
 
-    void ChangeCharacter(string charChange)
+    IEnumerator ChangeCharacter(string charChange)
     {
+        canChange = false;
         currentChar = charChange;
 
         // Character Model Changing
@@ -99,5 +104,8 @@ public class CharacterChanging : MonoBehaviour
         {
             Stuart.SetActive(false);
         }
+
+        yield return new WaitForSeconds(1f);
+        canChange = true;
     }
 }
