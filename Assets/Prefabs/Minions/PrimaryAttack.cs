@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class PrimaryAttack : MonoBehaviour
 {
-    // Heat Bullet
-    public GameObject heatBullet;
-    public Transform heatBulletSpawnPos;
-
     // Minion script components
     private CharacterChanging charChangeScript;
     private MinionBaseScript minionScript;
@@ -19,16 +15,21 @@ public class PrimaryAttack : MonoBehaviour
     // Components
     private Rigidbody rb;
 
-    // Abilities configurations
+	// Abilities configurations
 
-    // Kevin
+	// Kevin
 
-    // Bob
-    public float dashSpeed;
+	public GameObject heatBullet;
+	public Transform heatBulletSpawnPos;
+
+	// Bob
+	public float dashSpeed;
     public float dashTime;
     public LayerMask groundMask;
 
     // Stuart
+
+    public GameObject punchHitbox;
 
     void Start()
     {
@@ -99,8 +100,11 @@ public class PrimaryAttack : MonoBehaviour
                 // Stuart ability
                 if (charAbility == "s")
                 {
-
-                }
+                    punchHitbox.SetActive(true);
+					yield return new WaitForSeconds(0.2f);
+					punchHitbox.SetActive(false);
+					yield return new WaitForSeconds(0.3f);
+				}
                 canAttack = true;
             }
         }
