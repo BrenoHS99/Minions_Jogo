@@ -23,6 +23,7 @@ public class PrimaryAttack : MonoBehaviour
 	public Transform heatBulletSpawnPos;
 
 	// Bob
+
 	public float dashSpeed;
     public float dashTime;
     public LayerMask groundMask;
@@ -103,7 +104,7 @@ public class PrimaryAttack : MonoBehaviour
                     punchHitbox.SetActive(true);
 					yield return new WaitForSeconds(0.2f);
 					punchHitbox.SetActive(false);
-					yield return new WaitForSeconds(0.3f);
+					yield return new WaitForSeconds(0.5f);
 				}
                 canAttack = true;
             }

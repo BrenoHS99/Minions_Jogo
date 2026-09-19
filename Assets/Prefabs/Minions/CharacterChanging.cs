@@ -13,6 +13,7 @@ public class CharacterChanging : MonoBehaviour
     // Components
 
     private MinionBaseScript plrBaseScript;
+    private MinionHealth minionHpScript;
 
     // Configurations
     public bool canChange = true;
@@ -30,21 +31,22 @@ public class CharacterChanging : MonoBehaviour
         // Components
 
         plrBaseScript = GetComponent<MinionBaseScript>();
+        minionHpScript = GetComponent<MinionHealth>();
     }
 
     void Update()
     {
         // Change Characters
 
-        if (Input.GetKeyDown("1"))
+        if (Input.GetKeyDown("1") && minionHpScript.kevinHP > 0)
         {
             StartCoroutine(ChangeCharacter("k"));
         }
-        if (Input.GetKeyDown("2"))
+        if (Input.GetKeyDown("2") && minionHpScript.bobHP > 0)
         {
 			StartCoroutine(ChangeCharacter("b"));
         }
-        if (Input.GetKeyDown("3"))
+        if (Input.GetKeyDown("3") && minionHpScript.stuartHP > 0)
         {
 			StartCoroutine(ChangeCharacter("s"));
         }
@@ -72,7 +74,48 @@ public class CharacterChanging : MonoBehaviour
 
     IEnumerator ChangeCharacter(string charChange)
     {
-        canChange = false;
+        if (canChange)
+        {
+            canChange = false;
+            currentChar = charChange;
+
+            // Character Model Changing
+
+            // \_ enabling models
+            if (currentChar == "k")
+            {
+                Kevin.SetActive(true);
+            }
+            if (currentChar == "b")
+            {
+                Bob.SetActive(true);
+            }
+            if (currentChar == "s")
+            {
+                Stuart.SetActive(true);
+            }
+
+            // \_ disabling models
+            if (currentChar != "k")
+            {
+                Kevin.SetActive(false);
+            }
+            if (currentChar != "b")
+            {
+                Bob.SetActive(false);
+            }
+            if (currentChar != "s")
+            {
+                Stuart.SetActive(false);
+            }
+
+            yield return new WaitForSeconds(0.1f);
+            canChange = true;
+        }
+    }
+
+    public void ForceChangeChar(string charChange)
+    {
         currentChar = charChange;
 
         // Character Model Changing
@@ -104,8 +147,5 @@ public class CharacterChanging : MonoBehaviour
         {
             Stuart.SetActive(false);
         }
-
-        yield return new WaitForSeconds(1f);
-        canChange = true;
     }
 }

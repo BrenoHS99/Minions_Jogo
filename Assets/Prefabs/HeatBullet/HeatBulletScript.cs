@@ -3,6 +3,10 @@ using UnityEngine;
 public class HeatBulletScript : MonoBehaviour
 {
     public float bulletSpeed;
+    public float bulletKnockback;
+    public float bulletDmg;
+
+    public GameObject bulletExplosionPart;
 
     void Start()
     {
@@ -16,6 +20,14 @@ public class HeatBulletScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            EnemyScript enemyScript = other.gameObject.GetComponent<EnemyScript>();
+            enemyScript.TakeDamage(bulletDmg);
+            enemyScript.TakeKnockback(bulletKnockback);
+        }
+        GameObject bulletExpClone = Instantiate(bulletExplosionPart, transform.position, transform.rotation);
+        Destroy(bulletExpClone, 1f);
         Destroy(this.gameObject);
     }
 }
