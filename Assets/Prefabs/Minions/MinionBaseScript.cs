@@ -21,6 +21,18 @@ public class MinionBaseScript : MonoBehaviour
     // Components
     private Rigidbody rb;
 
+    // Kevin
+    public GameObject kevinRig;
+    private Animator kevinAnim;
+
+    // Bob
+    public GameObject bobRig;
+    private Animator bobAnim;
+
+    // Stuart
+    public GameObject stuartRig;
+    private Animator stuartAnim;
+
     // \_ Camera components
     private Camera cameraComponent;
 
@@ -38,6 +50,10 @@ public class MinionBaseScript : MonoBehaviour
 
         // Start Scripts
         speed = initialSpeed;
+
+		kevinAnim = kevinRig.GetComponent<Animator>();
+        bobAnim = bobRig.GetComponent<Animator>();
+        stuartAnim = stuartRig.GetComponent<Animator>();
     }
 
     void Update()
@@ -119,10 +135,32 @@ public class MinionBaseScript : MonoBehaviour
 			if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
 			{
 				rb.MovePosition(rb.position + transform.forward * speed * Time.deltaTime);
-			}
-			// Jump
 
-			if (Input.GetKey(KeyCode.Space) && onGround)
+				if(kevinRig.activeInHierarchy)
+					kevinAnim.SetBool("walking", true);
+
+				if(bobRig.activeInHierarchy)
+					bobAnim.SetBool("walking", true);
+
+                if (stuartRig.activeInHierarchy)
+                    stuartAnim.SetBool("walking", true);
+
+
+            }
+			else
+            {
+                if (kevinRig.activeInHierarchy)
+					kevinAnim.SetBool("walking", false);
+
+                if (bobRig.activeInHierarchy)
+					bobAnim.SetBool("walking", false);
+
+                if (stuartRig.activeInHierarchy)
+                    stuartAnim.SetBool("walking", false);
+            }
+            // Jump
+
+            if (Input.GetKey(KeyCode.Space) && onGround)
 			{
 				rb.linearVelocity = new Vector3(
 					rb.linearVelocity.x,
@@ -130,9 +168,18 @@ public class MinionBaseScript : MonoBehaviour
 					rb.linearVelocity.z);
 			}
 
-			// Sprint
+            if (kevinRig.activeInHierarchy)
+                kevinAnim.SetBool("falling", !onGround);
 
-			if (Input.GetKeyDown(KeyCode.LeftShift))
+            if (bobRig.activeInHierarchy)
+                bobAnim.SetBool("falling", !onGround);
+
+            if (stuartRig.activeInHierarchy)
+                stuartAnim.SetBool("falling", !onGround);
+
+            // Sprint
+
+            if (Input.GetKeyDown(KeyCode.LeftShift))
 			{
 				sprinting = true;
 			}
@@ -140,7 +187,16 @@ public class MinionBaseScript : MonoBehaviour
 			{
 				sprinting = false;
 			}
-		}
+
+            if (kevinRig.activeInHierarchy)
+                kevinAnim.SetBool("sprinting", sprinting);
+
+            if (bobRig.activeInHierarchy)
+                bobAnim.SetBool("sprinting", sprinting);
+
+            if (stuartRig.activeInHierarchy)
+                stuartAnim.SetBool("sprinting", sprinting);
+        }
 
 		if (sprinting)
 		{

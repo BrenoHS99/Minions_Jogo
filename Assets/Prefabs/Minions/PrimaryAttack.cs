@@ -22,21 +22,34 @@ public class PrimaryAttack : MonoBehaviour
 	public GameObject heatBullet;
 	public Transform heatBulletSpawnPos;
 
+    public GameObject kevinRig;
+    private Animator kevinAnim;
+
 	// Bob
 
 	public float dashSpeed;
     public float dashTime;
     public LayerMask groundMask;
 
+    public GameObject bobRig;
+    private Animator bobAnim;
+
     // Stuart
 
     public GameObject punchHitbox;
+
+    public GameObject stuartRig;
+    private Animator stuartAnim;
 
     void Start()
     {
         charChangeScript = GetComponent<CharacterChanging>();
         minionScript = GetComponent<MinionBaseScript>();
         rb = GetComponent<Rigidbody>();
+
+        kevinAnim = kevinRig.GetComponent<Animator>();
+        bobAnim = bobRig.GetComponent<Animator>();
+        stuartAnim = stuartRig.GetComponent<Animator>();
     }
 
     void Update()
@@ -88,6 +101,10 @@ public class PrimaryAttack : MonoBehaviour
                 if (charAbility == "k")
                 {
                     Instantiate(heatBullet, heatBulletSpawnPos.position, heatBulletSpawnPos.rotation);
+
+                    if (kevinRig.activeInHierarchy)
+                        kevinAnim.SetTrigger("shooting");
+
                     yield return new WaitForSeconds(1f);
                 }
 
@@ -95,12 +112,19 @@ public class PrimaryAttack : MonoBehaviour
                 if (charAbility == "b")
                 {
                     StartCoroutine(ActivateDash());
+
+                    if (bobRig.activeInHierarchy)
+                        bobAnim.SetTrigger("dashing");
+
                     yield return new WaitForSeconds(1.5f);
                 }
 
                 // Stuart ability
                 if (charAbility == "s")
                 {
+                    if (stuartRig.activeInHierarchy)
+                        stuartAnim.SetTrigger("melee");
+
                     punchHitbox.SetActive(true);
 					yield return new WaitForSeconds(0.2f);
 					punchHitbox.SetActive(false);
