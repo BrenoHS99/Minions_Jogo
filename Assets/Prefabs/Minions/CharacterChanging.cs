@@ -60,8 +60,8 @@ public class CharacterChanging : MonoBehaviour
         }
         if (currentChar == "b")
         {
-            plrBaseScript.initialSpeed = 7;
-            plrBaseScript.sprintSpeed = 10;
+            plrBaseScript.initialSpeed = 8;
+            plrBaseScript.sprintSpeed = 13;
             plrBaseScript.jumpForce = 4;
         }
         if (currentChar == "s")
