@@ -41,6 +41,16 @@ public class PrimaryAttack : MonoBehaviour
     public GameObject stuartRig;
     private Animator stuartAnim;
 
+    // SFXManager
+
+    private GameObject SFXmanager;
+
+    private GameObject whooshSfx;
+    private AudioSource whooshAudio;
+
+    private GameObject shootSfx;
+    private AudioSource shootAudio;
+
     void Start()
     {
         charChangeScript = GetComponent<CharacterChanging>();
@@ -50,6 +60,14 @@ public class PrimaryAttack : MonoBehaviour
         kevinAnim = kevinRig.GetComponent<Animator>();
         bobAnim = bobRig.GetComponent<Animator>();
         stuartAnim = stuartRig.GetComponent<Animator>();
+
+        SFXmanager = GameObject.FindWithTag("SFXManager");
+
+        whooshSfx = SFXmanager.transform.Find("Whoosh").gameObject;
+        shootSfx = SFXmanager.transform.Find("Shoot").gameObject;
+
+        whooshAudio = whooshSfx.GetComponent<AudioSource>();
+        shootAudio = shootSfx.GetComponent<AudioSource>();
     }
 
     void Update()
@@ -101,6 +119,7 @@ public class PrimaryAttack : MonoBehaviour
                 if (charAbility == "k")
                 {
                     Instantiate(heatBullet, heatBulletSpawnPos.position, heatBulletSpawnPos.rotation);
+                    shootAudio.PlayOneShot(shootAudio.clip);
 
                     if (kevinRig.activeInHierarchy)
                         kevinAnim.SetTrigger("shooting");
@@ -112,6 +131,7 @@ public class PrimaryAttack : MonoBehaviour
                 if (charAbility == "b")
                 {
                     StartCoroutine(ActivateDash());
+                    whooshAudio.PlayOneShot(whooshAudio.clip);
 
                     if (bobRig.activeInHierarchy)
                         bobAnim.SetTrigger("dashing");
@@ -125,6 +145,7 @@ public class PrimaryAttack : MonoBehaviour
                     if (stuartRig.activeInHierarchy)
                         stuartAnim.SetTrigger("melee");
 
+                    whooshAudio.PlayOneShot(whooshAudio.clip);
                     punchHitbox.SetActive(true);
 					yield return new WaitForSeconds(0.2f);
 					punchHitbox.SetActive(false);

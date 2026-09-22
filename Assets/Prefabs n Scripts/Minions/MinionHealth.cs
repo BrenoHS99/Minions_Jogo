@@ -25,12 +25,25 @@ public class MinionHealth : MonoBehaviour
     public GameObject sliderObj;
     private Slider canvasSlider;
 
+    // SFXManager
+
+    private GameObject SFXmanager;
+
+    private GameObject hurtSfx;
+    private AudioSource hurtAudio;
+
     void Start()
     {
         // Components
         characterScript = GetComponent<CharacterChanging>();
 
         canvasSlider = sliderObj.GetComponent<Slider>();
+
+        SFXmanager = GameObject.FindWithTag("SFXManager");
+
+        hurtSfx = SFXmanager.transform.Find("Hurt").gameObject;
+
+        hurtAudio = hurtSfx.GetComponent<AudioSource>();
     }
 
     void Update()
@@ -67,7 +80,7 @@ public class MinionHealth : MonoBehaviour
         }
         if (stuartHP <= 0 && kevinHP <= 0)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            GameManager.Instance.loseLife();
         }
 
         if (Input.GetKeyDown(KeyCode.K))
@@ -89,6 +102,7 @@ public class MinionHealth : MonoBehaviour
 
     public void TakeDamage(float dmg)
     {
+        hurtAudio.PlayOneShot(hurtAudio.clip);
         if (characterScript.currentChar == "k")
         {
             kevinHP -= dmg;

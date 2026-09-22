@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -36,9 +37,17 @@ public class MinionBaseScript : MonoBehaviour
     // \_ Camera components
     private Camera cameraComponent;
 
-
     // Layers
     public LayerMask groundLayer;
+
+	// SFXManager
+
+	private GameObject SFXmanager;
+
+	private GameObject jumpSfx;
+	private AudioSource jumpAudio;
+
+	private bool jumpAudioPlayed = false;
 
     void Start()
     {
@@ -54,6 +63,12 @@ public class MinionBaseScript : MonoBehaviour
 		kevinAnim = kevinRig.GetComponent<Animator>();
         bobAnim = bobRig.GetComponent<Animator>();
         stuartAnim = stuartRig.GetComponent<Animator>();
+
+        // sfx
+
+        SFXmanager = GameObject.FindWithTag("SFXManager");
+        jumpSfx = SFXmanager.transform.Find("Jump").gameObject;
+        jumpAudio = jumpSfx.GetComponent<AudioSource>();
     }
 
     void Update()
@@ -134,8 +149,6 @@ public class MinionBaseScript : MonoBehaviour
 
 			if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
 			{
-				rb.MovePosition(rb.position + transform.forward * speed * Time.deltaTime);
-
 				if(kevinRig.activeInHierarchy)
 					kevinAnim.SetBool("walking", true);
 
@@ -166,6 +179,17 @@ public class MinionBaseScript : MonoBehaviour
 					rb.linearVelocity.x,
 					1 * jumpForce,
 					rb.linearVelocity.z);
+
+				if (!jumpAudioPlayed)
+				{
+					jumpAudioPlayed = true;
+                    jumpAudio.PlayOneShot(jumpAudio.clip);
+                }
+			}
+
+			if (!onGround)
+			{
+				jumpAudioPlayed = false;
 			}
 
             if (kevinRig.activeInHierarchy)
@@ -216,6 +240,23 @@ public class MinionBaseScript : MonoBehaviour
 
         // Camera lerp
 
-        camera.transform.position = Vector3.Lerp(camera.transform.position, transform.position + new Vector3(0, 6, -7), 0.03f);
+        camera.transform.position = Vector3.Lerp(camera.transform.position, transform.position + new Vector3(0, 6, -7), 5f * Time.deltaTime);
+    }
+
+    private void FixedUpdate()
+    {
+        Debug.DrawRay(transform.position, transform.forward, Color.red);
+
+        Vector3 moveDirection = transform.forward * speed;
+		
+
+        if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && canMoveChar)
+        {
+			rb.linearVelocity = new Vector3(moveDirection.x, rb.linearVelocity.y, moveDirection.z);
+        }
+        else
+        {
+            rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+        }
     }
 }
