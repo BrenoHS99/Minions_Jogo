@@ -5919,7 +5919,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 03e6595a501b39e4e939fc55c16344cb, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.282
+  m_Volume: 0.077
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -12337,6 +12337,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LoadSceneColliderScript
   sceneId: 4
+  tagsCondition: Enemy
 --- !u!136 &2130000465
 CapsuleCollider:
   m_ObjectHideFlags: 0

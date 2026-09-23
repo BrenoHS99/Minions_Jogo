@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 
         if (lives < 0)
         {
-            SceneManager.LoadScene(3);
+            SceneManager.LoadScene(6);
             lives = 3;
         }
         else

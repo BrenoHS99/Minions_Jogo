@@ -950,13 +950,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d47571378d23e1e4ba289a6e10557660, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinionHealth
-  kevinHP: 100
-  stuartHP: 85
-  bobHP: 35
+  kevinHP: 150
+  stuartHP: 125
+  bobHP: 65
   playerHP: 0
-  kevinMaxHP: 100
-  stuartMaxHP: 85
-  bobMaxHP: 35
+  kevinMaxHP: 150
+  stuartMaxHP: 125
+  bobMaxHP: 65
   sliderObj: {fileID: 0}
 --- !u!1 &5064929859071870640
 GameObject:
@@ -1658,7 +1658,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9045906450338382816}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

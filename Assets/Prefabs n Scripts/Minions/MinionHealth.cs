@@ -82,22 +82,6 @@ public class MinionHealth : MonoBehaviour
         {
             GameManager.Instance.loseLife();
         }
-
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            if (characterScript.currentChar == "k")
-            {
-                kevinHP = 0;
-            }
-            if (characterScript.currentChar == "b")
-            {
-                bobHP = 0;
-            }
-            if (characterScript.currentChar == "s")
-            {
-                stuartHP = 0;
-            }
-        }
     }
 
     public void TakeDamage(float dmg)

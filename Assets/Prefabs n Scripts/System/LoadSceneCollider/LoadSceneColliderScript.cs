@@ -4,9 +4,14 @@ using UnityEngine.SceneManagement;
 public class LoadSceneColliderScript : MonoBehaviour
 {
     public int sceneId;
+    public string tagsCondition;
 
     private void OnTriggerEnter(Collider other)
     {
-        SceneManager.LoadScene(sceneId);
+        if(GameObject.FindGameObjectsWithTag(tagsCondition).Length == 0)
+        {
+            GameManager.Instance.lives = 3;
+            SceneManager.LoadScene(sceneId);
+        }
     }
 }
